@@ -26,7 +26,16 @@ import java_cup.runtime.*;
 LineTerminator = \r|\n|\r\n
 Whitespace = {LineTerminator} | [ \t\f]
 
-Comment = {}
+/* Comments */
+Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
+
+TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+// Comment can be the last line of the file, without line terminator.
+EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
+DocumentationComment = "/**" {CommentContent} "*"+ "/"
+CommentContent       = ( [^*] | \*+ [^/*] )*
+
+Identifier = [:jletter:] [:jletterdigit:]*
 
 %%
 <YYINITIAL> {
@@ -43,9 +52,37 @@ Comment = {}
     "void"      {return symbol(VOID);}
     "while"     {return symbol(WHILE);}
 
+    /* operators */
+    "+"         {return symbol(PLUS);}
+    "-"         {return symbol(MINUS);}
+    "*"         {return symbol(MULT);}
+    "/"         {return symbol(DIV);}
+    "="         {return symbol(EQ);}
+    ">"         {return symbol(GT);}
+    "<"         {return symbol(LT);}
+    "<="        {return symbol(LTEQ);}
+    ">="        {return symbol(GTEQ);}
+    "=="        {return symbol(EQEQ);}
+    "!="        {return symbol(NOTEQ);}
+    "&&"        {return symbol(ANDAND);}
+    "||"        {return symbol(OROR);}
+    "!"         {return symbol(NOT);}
+    "++"        {return symbol(PLUSPLUS);}
+    "--"        {return symbol(MINUSMINUS);}
+
+    /* separators */
+    "("         {return symbol(LPAREN);}
+    ")"         {return symbol(RPAREN);}
+    "{"         {return symbol(LBRACE);}
+    "}"         {return symbol(RBRACE);}
+    "["         {return symbol(LBRACK);}
+    "]"         {return symbol(RBRACK);}
+    ";"         {return symbol(SEMICOLON);}
+    ","         {return symbol(COMMA);}
+
 
 }
 
-[^]                              { throw new RuntimeException("Illegal character \""+yytext()+
-                                                              "\" at line "+yyline+", column "+yycolumn); }
-<<EOF>>                          { return symbol(EOF); }
+[^]             {throw new RuntimeException("Illegal character \""+yytext()+
+                                                              "\" at line "+yyline+", column "+yycolumn);}
+<<EOF>>         {return symbol(EOF);}

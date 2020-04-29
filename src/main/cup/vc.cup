@@ -1,0 +1,71 @@
+import java_cup.runtime.*;
+
+parser code  {:
+  public void report_error(String message, Object info) {
+    StringBuilder m = new StringBuilder("Error ");
+
+    if (info instanceof java_cup.runtime.Symbol)
+      m.append( "("+info.toString()+")" );
+
+    m.append(" : "+message);
+
+    System.out.println(m);
+  }
+
+  public void report_fatal_error(String message, Object info) {
+    report_error(message, info);
+    throw new RuntimeException("Fatal Syntax Error");
+  }
+:};
+
+terminal java.lang.String IDENTIFIER;
+
+terminal java.lang.Number INTEGER_LITERAL;
+terminal java.lang.String STRING_LITERAL;
+
+
+// Keywords
+terminal BOOLEAN;
+terminal BREAK;
+terminal CONTINUE;
+terminal ELSE;
+terminal FOR;
+terminal FLOAT;
+terminal IF;
+terminal INT;
+terminal RETURN;
+terminal VOID;
+terminal WHILE;
+
+// Operators
+// Arithmetic
+terminal PLUS;
+terminal MINUS;
+terminal MULT;
+terminal DIV;
+// Relational
+terminal GT;
+terminal LT;
+terminal LTEQ;
+terminal GTEQ;
+// Equality
+terminal EQEQ;
+terminal NOTEQ;
+// Logical
+terminal ANDAND;
+terminal OROR;
+terminal NOT;
+// Assignment
+terminal EQ;
+terminal PLUSPLUS; //Unary plus
+terminal MINUSMINUS; //Unary minus
+
+//Seperators
+terminal LPAREN;
+terminal RPAREN;
+terminal LBRACE;
+terminal RBRACE;
+terminal LBRACK;
+terminal RBRACK;
+terminal SEMICOLON;
+terminal COMMA;
