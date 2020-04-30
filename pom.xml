@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.uet</groupId>
-    <artifactId>VC_JFlex</artifactId>
+    <artifactId>vc_jflex</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>VC_JFlex</name>
     <properties>
@@ -38,7 +38,7 @@
             <plugin>
                 <groupId>de.jflex</groupId>
                 <artifactId>jflex-maven-plugin</artifactId>
-                <version>1.8.0</version>
+                <version>1.8.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -57,7 +57,33 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <symbolInterface>true</symbolInterface>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${project.artifactId}-full-${project.version}</finalName>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>Main</mainClass>
+                                </transformer>
+                            </transformers>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.github.vbmacher:java-cup-runtime</include>
+                                </includes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>

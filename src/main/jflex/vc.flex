@@ -2,7 +2,7 @@ import java_cup.runtime.*;
 %%
 
 %public
-%class Scanner
+%class VCScanner
 %implements sym
 
 %unicode
@@ -24,6 +24,7 @@ import java_cup.runtime.*;
 
 /* Defenitions */
 LineTerminator = \r|\n|\r\n
+InputCharacter = [^\r\n]
 Whitespace = {LineTerminator} | [ \t\f]
 
 /* Comments */
@@ -37,9 +38,19 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
 
 Identifier = [:jletter:] [:jletterdigit:]*
 
+/* floating point literals */
+FloatLiteral  = ({FLit1}|{FLit2}|{FLit3}) {Exponent}? [fF]
+
+FLit1    = [0-9]+ \. [0-9]*
+FLit2    = \. [0-9]+
+FLit3    = [0-9]+
+Exponent = [eE] [+-]? [0-9]+
+
+%state STRING, CHARLITERAL
+
 %%
 <YYINITIAL> {
-    /* kaywords */
+    /* keywords */
     "boolean"   {return symbol(BOOLEAN);}
     "break"     {return symbol(BREAK);}
     "continue"  {return symbol(CONTINUE);}
@@ -80,7 +91,15 @@ Identifier = [:jletter:] [:jletterdigit:]*
     ";"         {return symbol(SEMICOLON);}
     ","         {return symbol(COMMA);}
 
+    "true"      {return symbol(BOOLEAN_LITERAL, true);}
+    "false"     {return symbol(BOOLEAN_LITERAL, false);}
 
+    {Comment}       {/* ignored */}
+    {Whitespace}    {/* ignored */}
+}
+
+<STRING> {
+    \"          {yybegin(YYINITIAL); return symbol(STRING_LITERAL, stringBuilder.toString());}
 }
 
 [^]             {throw new RuntimeException("Illegal character \""+yytext()+
