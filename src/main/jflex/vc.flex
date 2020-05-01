@@ -43,12 +43,15 @@ IntegerLiteral = 0 | [1-9][0-9]*
 /* floating point literals */
 FloatLiteral  = ({FLit1}|{FLit2}|{FLit3}) {Exponent}?
 
-FLit1    = [0-9]+ \. [0-9]*
-FLit2    = \. [0-9]+
+FLit1    = [0-9]+\.[0-9]*
+FLit2    = \.[0-9]+
 FLit3    = [0-9]+
-Exponent = [eE] [+-]? [0-9]+
+Exponent = [eE][+-]?[0-9]+
 
-%state STRING, CHARLITERAL
+/* string and character literals */
+StringCharacter = [^\r\n\"\\]
+
+%state STRING
 
 %%
 <YYINITIAL> {
@@ -102,12 +105,21 @@ Exponent = [eE] [+-]? [0-9]+
     {Identifier}        {return symbol(IDENTIFIER, yytext());}
     {IntegerLiteral}    {return symbol(INTEGER_LITERAL, Integer.valueOf(yytext()));}
     {FloatLiteral}      {return symbol(FLOATING_POINT_LITERAL, new Float(yytext()));}
+    \"                  {yybegin(STRING); stringBuilder.setLength(0);} //String literal
 }
 
 <STRING> {
-    \"          {yybegin(YYINITIAL); return symbol(STRING_LITERAL, stringBuilder.toString());}
+    \"                      {yybegin(YYINITIAL); return symbol(STRING_LITERAL, stringBuilder.toString());}
+    {StringCharacter}+      {stringBuilder.append(yytext());}
+    "\\b"                   {stringBuilder.append('\b');}
+    "\\t"                   {stringBuilder.append('\t');}
+    "\\n"                   {stringBuilder.append('\n');}
+    "\\f"                   {stringBuilder.append('\f');}
+    "\\r"                   {stringBuilder.append('\r');}
+    "\\\""                  {stringBuilder.append('\"');}
+    "\\'"                   {stringBuilder.append('\'');}
+    "\\\\"                  {stringBuilder.append('\\');}
 }
 
-[^]             {throw new RuntimeException("Illegal character \""+yytext()+
-                                                              "\" at line "+yyline+", column "+yycolumn);}
+[^]             {throw new RuntimeException("Illegal character: " + yytext() + " at line " + (yyline+1) + ", column " + (yycolumn+1));}
 <<EOF>>         {return symbol(EOF);}
