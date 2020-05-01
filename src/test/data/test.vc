@@ -10,4 +10,17 @@ int main() {
         String s = "new\nline";
         return ;
     }
+    boolean b = true;
+    boolean f = false;
+    if (a > b) {
+        c = a - bar;
+        e = d - 2.0;
+    }
+    else (a == b || a == c){
+        d = e + 6.0;
+        b = a + c;
+    }
+    if (true) {
+        r = 1;
+    }
 }

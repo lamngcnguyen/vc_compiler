@@ -1,9 +1,10 @@
-## **VC Parser implementation on JFLex with CUP**
-### **Build, run**
-Build using maven:
+## **VC Parser implementation on JFLex**
+### **_Without CUP_**
+#### **Build**
+Build using JFlex jar file
 
-`mvn package`
+`java -jar lib\jflex-full-1.8.1.jar src\main\jflex\vc.flex`
 
-Run the parser:
+Run the scanner:
 
-`java -jar target/vc_jflex-full-1.0-SNAPSHOT.jar <inputfile>`
+`java -cp src\main\jflex VCScanner <inputfile>`
