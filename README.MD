@@ -1,5 +1,5 @@
 ## **VC Parser implementation on JFLex with CUP**
-### **Build, run, test**
+### **Build, run**
 Build using maven:
 
 `mvn package`

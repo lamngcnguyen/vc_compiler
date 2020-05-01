@@ -38,8 +38,10 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
 
 Identifier = [:jletter:] [:jletterdigit:]*
 
+IntegerLiteral = 0 | [1-9][0-9]*
+
 /* floating point literals */
-FloatLiteral  = ({FLit1}|{FLit2}|{FLit3}) {Exponent}? [fF]
+FloatLiteral  = ({FLit1}|{FLit2}|{FLit3}) {Exponent}?
 
 FLit1    = [0-9]+ \. [0-9]*
 FLit2    = \. [0-9]+
@@ -96,6 +98,10 @@ Exponent = [eE] [+-]? [0-9]+
 
     {Comment}       {/* ignored */}
     {Whitespace}    {/* ignored */}
+
+    {Identifier}        {return symbol(IDENTIFIER, yytext());}
+    {IntegerLiteral}    {return symbol(INTEGER_LITERAL, Integer.valueOf(yytext()));}
+    {FloatLiteral}      {return symbol(FLOATING_POINT_LITERAL, new Float(yytext()));}
 }
 
 <STRING> {
