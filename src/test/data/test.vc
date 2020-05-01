@@ -21,6 +21,7 @@ int main() {
         b = a + c;
     }
     if (true) {
+        int x_3 = 1;
         r = 1;
     }
 }

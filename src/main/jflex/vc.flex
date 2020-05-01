@@ -11,7 +11,7 @@
 %{
     StringBuilder stringBuilder = new StringBuilder();
     private void symbol(String type, Object value) {
-        System.out.printf("Line %d | Column: %d | Type: %s | Value: %s \n", yyline++, yycolumn++, type, value);
+        System.out.printf("Line %d | Column: %d | Type: %s | Value: %s \n", yyline+1, yycolumn+1, type, value);
     }
 %}
 
