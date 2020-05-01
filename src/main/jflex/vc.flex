@@ -59,8 +59,8 @@ BooleanLiteral = true|false
     {Keywords}          {symbol("Keywords", yytext());}
     {Operators}         {symbol("Operators", yytext());}
     {Seperators}        {symbol("Seperators", yytext());}
-    {BooleanLiteral}    {symbol("Boolean Literal", yytext());}
 
+    {BooleanLiteral}    {symbol("Boolean Literal", yytext());}
     {Identifier}        {symbol("Identifiers", yytext());}
     {IntegerLiteral}    {symbol("Integer Literal", Integer.valueOf(yytext()));}
     {FloatLiteral}      {symbol("Floating-point Literal", new Float(yytext()));}
