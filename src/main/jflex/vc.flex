@@ -14,10 +14,8 @@ import java.nio.file.*;
     private void symbol(String type, Object value) {
         try {
             File f = new File("result.txt");
-            if (!f.exists()) {
-                f.createNewFile();
-            }
-            String result = "Line " + yyline+1 + " | Column: " + yycolumn+1 + " | Type: " + type + " | Value: " + value + " \n";
+            f.createNewFile();
+            String result = "Line " + (yyline+1) + " | Column: " + (yycolumn+1) + " | Type: " + type + " | Value: " + value + " \n";
             Files.write(Paths.get("result.txt"), result.getBytes(), StandardOpenOption.APPEND);
             System.out.printf("Line %d | Column: %d | Type: %s | Value: %s \n", yyline+1, yycolumn+1, type, value);
         } catch (Exception e) {
